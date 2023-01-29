@@ -1,0 +1,150 @@
+:root {
+  --red: hsl(0, 78%, 62%);
+  --cyan: hsl(180, 62%, 55%);
+  --orange: hsl(34, 97%, 64%);
+  --blue: hsl(212, 86%, 64%);
+  --varyDarkBlue: hsl(234, 12%, 34%);
+  --grayishBlue: hsl(229, 6%, 66%);
+  --veryLightGray: hsl(0, 0%, 98%);
+  --weight1: 200;
+  --weight2: 400;
+  --weight3: 600;
+
+  --dark: #041C32;
+  --lessDark: #ECB365;
+  --light: #064663;
+  --lighter: #ECB365;
+
+  --backgroundColor: #FFFBF5;
+  --boxColor: #F7EFE5;
+  --navColor: #F7EFE5;
+  --shadowColor: #C3ACD0;
+  --textColor: #674188;
+  --linkColor: #674188;
+
+  /*--backgroundColor: #F5EFE6;*/
+  /*--boxColor: #E8DFCA;*/
+  /*--navColor: #E8DFCA;*/
+  /*--shadowColor: #AEBDCA;*/
+  /*--textColor: #7895B2;*/
+  /*--linkColor: #7895B2;*/
+}
+
+a {
+  font-weight: 500;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #747bff;
+}
+
+body {
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  /*background-color: var(--dark);*/
+
+  /*background-image: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);*/
+
+  background-color: var(--backgroundColor);
+
+  margin: 0;
+  display: flex;
+  place-items: flex-start;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.box p {
+  color: var(--textColor);
+  font-weight: var(--weight3);
+}
+
+.box {
+  background-color: var(--boxColor);
+
+
+  border-radius: 5px;
+  box-shadow: 0px 10px 40px -20px var(--shadowColor);
+  padding: 10px;
+  margin: 10px;
+}
+
+.cyan {
+  border-top: 3px solid var(--cyan);
+}
+.red {
+  border-top: 3px solid var(--red);
+}
+.blue {
+  border-top: 3px solid var(--blue);
+}
+.orange {
+  border-top: 3px solid var(--orange);
+}
+
+.items-image {
+  width: 50px;
+}
+
+.classFilterElement {
+  display: inline;
+}
+
+#navbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 180px;
+  max-height: 180px;
+  width: 80vw;
+  background-color: var(--navColor);
+  z-index: 0234789523478905234785789234578903478905;
+  color: var(--textColor)
+}
+
+#builds {
+  position: relative;
+  top: 190px;
+  width: 90vw;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#navbar div button {
+  margin-top: 20px;
+}
+
+.filterElement {
+  margin-top: 20px;
+}
+
+a {
+  color: var(--linkColor);
+}
