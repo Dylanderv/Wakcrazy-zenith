@@ -10,6 +10,7 @@ class ZenithWakfuService {
     private ImageBaseUrl: string = 'https://www.zenithwakfu.com/images/items/';
     private ClassIconsBaseUrl: string = 'https://www.zenithwakfu.com/images/breeds/icons/';
     private SpellIconsBaseUrl: string = 'https://www.zenithwakfu.com/images/spells/';
+    private BuildPictosBaseUrl: string = 'https://www.zenithwakfu.com/images/build_pictos/';
     public DefaultMinLevel: number = 0;
     public DefaultMaxLevel: number = 230;
 
@@ -100,6 +101,10 @@ class ZenithWakfuService {
 
     public GetSpellIcon(spellId: string) {
         return new Url(this.SpellIconsBaseUrl).AppendPathSegment(`${spellId}.webp`).ToString();
+    }
+
+    public GetBuildPictoFromName(pictoName: string) {
+        return new Url(this.BuildPictosBaseUrl).AppendPathSegment(`${pictoName}.webp`).ToString();
     }
 }
 

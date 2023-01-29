@@ -148,3 +148,7 @@ button:focus-visible {
 a {
   color: var(--linkColor);
 }
+
+.picto-image {
+  width: 25px;
+}

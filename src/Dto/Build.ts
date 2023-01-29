@@ -1,4 +1,5 @@
 import {EquipmentLight} from "./EquipmentLight";
+import {BuildPicto} from "./BuildPicto";
 
 export interface Build {
     name_job: string;
@@ -12,5 +13,5 @@ export interface Build {
     id_user: number;
     user: string;
     equipments_light: EquipmentLight[];
-    pictos: any[];
+    pictos: BuildPicto[];
 }

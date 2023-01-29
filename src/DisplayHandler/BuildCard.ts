@@ -17,8 +17,14 @@ export class BuildCard {
                 <div>
                     
                     <a href="${zenithWakfuService.GetRedirectLink(this.BuildEnhanced.Overview)}" target="_blank">
-                        <img class="inner-image" src="${zenithWakfuService.GetClassIcon(this.BuildEnhanced.Overview.id_job.toString())}">
+                        <img class="inner-image" src="${zenithWakfuService.GetClassIcon(this.BuildEnhanced.Overview.id_job.toString())}"/>
                         [NIV.${this.BuildEnhanced.Overview.level_build}] ${this.BuildEnhanced.Overview.name_build} - ${this.BuildEnhanced.Overview.date_build}
+                        
+                        ${this.BuildEnhanced.Overview.pictos
+                            .map(x => `<img class="picto-image" alt="${x.name_picto}" src="${zenithWakfuService.GetBuildPictoFromName(x.gfx_id)}"/>`)
+                            .join('')
+                        }
+                        
                     </a>
                     <br>
                     ${this.BuildEnhanced.Overview.equipments_light.length > 0
