@@ -1,6 +1,6 @@
 export class FetchNextPageButton {
     private readonly Button: HTMLButtonElement;
-    private readonly DefaultStateText = 'Récupérer les 100 premiers éléments';
+    private readonly DefaultStateText = 'Récupérer les éléments';
     private readonly FetchingStateText = '↺ wsh click plus attend pélo';
 
     constructor(button: HTMLButtonElement) {

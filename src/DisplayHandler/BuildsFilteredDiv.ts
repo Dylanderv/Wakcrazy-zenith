@@ -10,7 +10,7 @@ export class BuildsFilteredDiv {
     private newBuilds: BuildEnhanced[] = [];
     private builds: BuildEnhanced[] = [];
     private BuildCards: BuildCard[] = [];
-    private filter: BuildFilters = new BuildFilters(true, false, false, false);
+    private filter: BuildFilters = new BuildFilters(true, false, false, false, 10);
 
     constructor(div: HTMLDivElement) {
         this.MainDiv = div;
@@ -20,10 +20,8 @@ export class BuildsFilteredDiv {
         this.MainDiv.appendChild(this.DivAddFetching);
     }
 
-    public DisplayIsFetching(total: number) {
-        this.MainDiv.appendChild(this.DivBaseFetching);
-        this.MainDiv.appendChild(this.DivAddFetching);
-        this.DivBaseFetching.innerHTML = `<p>Récupération des ${total} premiers éléments  ...</p>`;
+    public DisplayIsFetching(currentFetched: number, total: number) {
+        this.DivBaseFetching.innerHTML = `<p>${(currentFetched / total) * 100}% - Récupération ${currentFetched} / ${total}</p>`;
     }
 
     public DisplayEndFetching(total: number) {

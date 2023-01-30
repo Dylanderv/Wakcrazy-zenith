@@ -26,8 +26,8 @@ export class FiltersDiv {
         div.classList.add('levelFilterElement')
         div.classList.add('filterElement')
 
-        const [minLevelText, minLevelInput] = this.getInputLevelDiv('min');
-        const [maxLevelText, maxLevelInput] = this.getInputLevelDiv('max')
+        const [minLevelText, minLevelInput] = this.getInputNumber('min');
+        const [maxLevelText, maxLevelInput] = this.getInputNumber('max')
 
         div.appendChild(minLevelText);
         div.appendChild(minLevelInput);
@@ -43,20 +43,26 @@ export class FiltersDiv {
 
         const div = document.createElement('div');
 
+
         const [enchantName, enchantInput] = this.getInputFilterResult('Enchant')
         const [EquipmentName, EquipmentInput] = this.getInputFilterResult('Equipment')
         const [PassiveName, PassiveInput] = this.getInputFilterResult('Passive')
         const [ActiveName, ActiveInput] = this.getInputFilterResult('Active')
 
-        // @ts-ignore
-        enchantInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked))
-// @ts-ignore
-        EquipmentInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked))
-        // @ts-ignore
-        PassiveInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked))
-        // @ts-ignore
-        ActiveInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked))
+        const [namePage, inputPage] = this.getInputNumber('page');
 
+        // @ts-ignore
+        inputPage.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked, inputPage.value))
+        // @ts-ignore
+        enchantInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked, inputPage.value))
+// @ts-ignore
+        EquipmentInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked, inputPage.value))
+        // @ts-ignore
+        PassiveInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked, inputPage.value))
+        // @ts-ignore
+        ActiveInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked, inputPage.value))
+
+        div.appendChild(document.createElement('br'));
         div.appendChild(enchantName);
         div.appendChild(enchantInput);
         div.appendChild(EquipmentName);
@@ -65,6 +71,9 @@ export class FiltersDiv {
         div.appendChild(PassiveInput);
         div.appendChild(ActiveName);
         div.appendChild(ActiveInput);
+        div.appendChild(document.createElement('br'));
+        div.appendChild(namePage);
+        div.appendChild(inputPage);
 
         divList.push(div);
         return divList;
@@ -80,17 +89,25 @@ export class FiltersDiv {
         return [filterName, filterInput];
     }
 
-    private getInputLevelDiv(type: 'min' | 'max'): [HTMLSpanElement, HTMLInputElement] {
-        const minLevelText = document.createElement('span');
-        minLevelText.innerText = type === 'min' ? 'Niv. min : ' : 'Niv. max : ';
+    private getInputNumber(type: 'min' | 'max' | 'page'): [HTMLSpanElement, HTMLInputElement] {
+        const name = document.createElement('span');
+        name.innerText = type === 'min' ? 'Niv. min : ' : type === 'max' ? 'Niv. max : ' : 'Nombre de page a récupérer (10 elements par page)';
 
-        const minLevelInput = document.createElement('input');
-        minLevelInput.type = 'number';
+        const input = document.createElement('input');
+        input.type = 'number';
 
-        // @ts-ignore
-        minLevelInput.addEventListener('input', (e) => filterEventService.DispatchLevelFilterUpdated(type, e.target.value))
 
-        return [minLevelText, minLevelInput];
+        if (type !== 'page') {
+            // @ts-ignore
+            input.addEventListener('input', (e) => filterEventService.DispatchLevelFilterUpdated(type, e.target.value))
+        }
+        else {
+            // @ts-ignore
+            input.value = 10;
+        }
+
+
+        return [name, input];
     }
 
     private GetClassFilterList(): HTMLDivElement[] {

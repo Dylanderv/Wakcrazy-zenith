@@ -19,6 +19,7 @@ let currentClassFilter: number[] = [];
 let currentLevelFilter: {min: number, max: number} = {min: 0, max: 500};
 let isInFilterState = true;
 let pageToRetrieveInFilterMode = 10;
+let currentPagination = 0;
 
 getBuildsCallEventService.SetGetBuildsCallStartedEventListener(HandleBuildFetchingStarted);
 getBuildsCallEventService.SetGetBuildsCallEndedEventListener(HandleBuildFetchingEnded);
@@ -41,15 +42,17 @@ async function HandleBuilds(): Promise<void> {
     getBuildsCallEventService.DispatchGetBuildsCallStartedEvent();
     let buildsFetched: Build[] = [];
     if (isInFilterState) {
-        for(let i = 1; i < pageToRetrieveInFilterMode; i++) {
+        console.log(pageToRetrieveInFilterMode)
+        for(currentPagination = 1; currentPagination < pageToRetrieveInFilterMode; currentPagination++) {
             const buildList = await zenithWakfuService
                 .GetBuilds(
-                    i,
+                    currentPagination,
                     {
                         LevelFilter: {Min: currentLevelFilter.min, Max: currentLevelFilter.max},
                         ClassFilter: currentClassFilter
                     });
 
+            buildsFilteredDiv.DisplayIsFetching(currentPagination * 10, pageToRetrieveInFilterMode * 10);
             buildsFetched.push(...buildList.builds)
         }
     } else {
@@ -94,7 +97,7 @@ async function HandleBuilds(): Promise<void> {
 
 function HandleBuildFetchingStarted(_evt: Event) {
     if (isInFilterState) {
-        buildsFilteredDiv.DisplayIsFetching(pageToRetrieveInFilterMode * 10);
+        buildsFilteredDiv.DisplayIsFetching(currentPagination * 10, pageToRetrieveInFilterMode * 10);
     }
     getPageButton.SetFetchingDataState();
 }
@@ -122,8 +125,10 @@ function HandleFilterLevelUpdated(levelType: 'min' | 'max', value: number) {
     }
 }
 
-function HandleFilterResultUpdated(hasEnchant: boolean, hasEquipment: boolean, hasActiveSpell: boolean, hasPassiveSpell: boolean) {
-    const filter = new BuildFilters(hasEnchant, hasEquipment, hasActiveSpell, hasPassiveSpell);
+function HandleFilterResultUpdated(hasEnchant: boolean, hasEquipment: boolean, hasActiveSpell: boolean, hasPassiveSpell: boolean, pageToRetrieve: number) {
+    const filter = new BuildFilters(hasEnchant, hasEquipment, hasActiveSpell, hasPassiveSpell, pageToRetrieve);
+    pageToRetrieveInFilterMode = pageToRetrieve;
+    console.log(pageToRetrieve)
     buildsFilteredDiv.UpdateFilters(filter);
 }
 

@@ -15,8 +15,8 @@ class FilterEventService {
         eventService.DispatchEvent(event);
     }
 
-    DispatchFilterResultEvent(hasEnchant: boolean, hasEquipment: boolean, hasActiveSpell: boolean, hasPassiveSpell: boolean) {
-        const event = new CustomEvent(this.FilterResultEvent, {detail: {hasEnchant, hasEquipment, hasActiveSpell, hasPassiveSpell}});
+    DispatchFilterResultEvent(hasEnchant: boolean, hasEquipment: boolean, hasActiveSpell: boolean, hasPassiveSpell: boolean, pageToRetrieve: number) {
+        const event = new CustomEvent(this.FilterResultEvent, {detail: {hasEnchant, hasEquipment, hasActiveSpell, hasPassiveSpell, pageToRetrieve}});
         eventService.DispatchEvent(event);
     }
 
@@ -35,11 +35,12 @@ class FilterEventService {
         })
     }
 
-    SetFilterResultEventListener(listener: (hasEnchant: boolean, hasEquipment: boolean, hasActiveSpell: boolean, hasPassiveSpell: boolean) => void) {
+    SetFilterResultEventListener(listener: (hasEnchant: boolean, hasEquipment: boolean, hasActiveSpell: boolean, hasPassiveSpell: boolean, pageToRetrieve: number) => void) {
         // @ts-ignore
         eventService.AddEventListener(this.FilterResultEvent, (event: CustomEvent) => {
             // @ts-FilterResultEvent
-            listener(event.detail.hasEnchant, event.detail.hasEquipment, event.detail.hasActiveSpell, event.detail.hasPassiveSpell);
+            console.log(event);
+            listener(event.detail.hasEnchant, event.detail.hasEquipment, event.detail.hasActiveSpell, event.detail.hasPassiveSpell, event.detail.pageToRetrieve);
         })
     }
 }

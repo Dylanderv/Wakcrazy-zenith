@@ -26,7 +26,4 @@ export class BuildsDiv {
         return this.BuildCards
             .reduce((previousValue, currentValue) => previousValue += currentValue.ToHtml(), '');
     }
-
-
-
 }

@@ -5,12 +5,14 @@ export class BuildFilters {
     private readonly ShouldContainEquipment: boolean;
     private readonly ShouldContainActiveSpell: boolean;
     private readonly ShouldContainPassiveSpell: boolean;
+    public readonly NumberOfPagesToRetrieve: number;
 
-    constructor(hasEnchant: boolean, hasEquipment: boolean, hasActiveSpell: boolean, hasPassiveSpell: boolean) {
+    constructor(hasEnchant: boolean, hasEquipment: boolean, hasActiveSpell: boolean, hasPassiveSpell: boolean, numberOfPagesToRetrieve: number) {
         this.ShouldContainPassiveSpell = hasPassiveSpell;
         this.ShouldContainActiveSpell = hasActiveSpell;
         this.ShouldContainEquipment = hasEquipment;
         this.ShouldContainEnchant = hasEnchant;
+        this.NumberOfPagesToRetrieve = numberOfPagesToRetrieve;
     }
 
 
