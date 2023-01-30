@@ -13,7 +13,7 @@ export class BuildsDiv {
     }
 
     PushNewBuilds(builds: BuildEnhanced[]) {
-        const buildCards = builds.map(x => new BuildCard(x.Overview.id_build, x));
+        const buildCards = builds.map(x => new BuildCard(x));
         this.BuildCards.push(...buildCards);
         this.RefreshDisplay();
     }

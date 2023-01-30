@@ -2,12 +2,10 @@ import {zenithWakfuService} from "../Service/ZenithWakfu.service";
 import {BuildEnhanced} from "../Model/BuildEnhanced";
 
 export class BuildCard {
-    public readonly BuildId: number;
     // @ts-ignore
     public readonly BuildEnhanced: BuildEnhanced;
 
-    constructor(buildId: number, buildEnhanced: BuildEnhanced) {
-        this.BuildId = buildId;
+    constructor(buildEnhanced: BuildEnhanced) {
         this.BuildEnhanced = buildEnhanced;
     }
 

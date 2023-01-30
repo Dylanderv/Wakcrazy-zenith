@@ -6,62 +6,77 @@ import {BuildsDiv} from "./DisplayHandler/BuildsDiv";
 import {BuildEnhanced} from "./Model/BuildEnhanced";
 import {FiltersDiv} from "./DisplayHandler/FiltersDiv";
 import {filterEventService} from "./Service/FilterEventService";
-import {RestartFetchButton} from "./DisplayHandler/RestartFetchButton";
+import {BuildFilters} from "./Model/BuildFilters";
+import {BuildsFilteredDiv} from "./DisplayHandler/BuildsFilteredDiv";
 
 let buildsDiv: BuildsDiv;
+let buildsFilteredDiv: BuildsFilteredDiv;
 let filterDiv: FiltersDiv;
 let getPageButton: FetchNextPageButton;
-let restartFetch: RestartFetchButton;
 const currentBuilds: Build[] = [];
 let currentFetchedPage = 0;
 let currentClassFilter: number[] = [];
 let currentLevelFilter: {min: number, max: number} = {min: 0, max: 500};
+let isInFilterState = true;
+let pageToRetrieveInFilterMode = 10;
 
 getBuildsCallEventService.SetGetBuildsCallStartedEventListener(HandleBuildFetchingStarted);
 getBuildsCallEventService.SetGetBuildsCallEndedEventListener(HandleBuildFetchingEnded);
 filterEventService.SetToggleClassFilterListener(HandleFilterClassToggled);
 filterEventService.SetLevelFilterUpdatedListener(HandleFilterLevelUpdated);
+filterEventService.SetFilterResultEventListener(HandleFilterResultUpdated);
 
-export function setupTestCallButton(fetchNextPageButton: HTMLButtonElement, restartFetchButton: HTMLButtonElement, builds: HTMLDivElement, filters: HTMLDivElement) {
+export function setupTestCallButton(fetchNextPageButton: HTMLButtonElement, builds: HTMLDivElement, filters: HTMLDivElement) {
     buildsDiv = new BuildsDiv(builds);
+    buildsFilteredDiv = new BuildsFilteredDiv(builds);
     filterDiv = new FiltersDiv(filters);
     getPageButton = new FetchNextPageButton(fetchNextPageButton);
     getPageButton.SetDefaultState()
     getPageButton.SetClickEventHandler(HandleBuilds);
 
-    restartFetch = new RestartFetchButton(restartFetchButton);
-    restartFetch.SetClickEventHandler(restartFetchHandler)
-    restartFetch.SetDefaultState();
-
     filterDiv.DisplayFilters();
-}
-
-async function restartFetchHandler(): Promise<void> {
-    currentFetchedPage = 0;
-    currentBuilds.length = 0;
-    buildsDiv.CleanBuildList()
-    buildsDiv.RefreshDisplay()
-    await HandleBuilds();
 }
 
 async function HandleBuilds(): Promise<void> {
     getBuildsCallEventService.DispatchGetBuildsCallStartedEvent();
-    const buildList = await zenithWakfuService
-        .GetBuilds(
-            ++currentFetchedPage,
-            {
-                LevelFilter: {Min: currentLevelFilter.min, Max: currentLevelFilter.max},
-                ClassFilter: currentClassFilter
-            });
+    let buildsFetched: Build[] = [];
+    if (isInFilterState) {
+        for(let i = 1; i < pageToRetrieveInFilterMode; i++) {
+            const buildList = await zenithWakfuService
+                .GetBuilds(
+                    i,
+                    {
+                        LevelFilter: {Min: currentLevelFilter.min, Max: currentLevelFilter.max},
+                        ClassFilter: currentClassFilter
+                    });
 
-    currentBuilds.push(...buildList.builds);
+            buildsFetched.push(...buildList.builds)
+        }
+    } else {
+        const buildList = await zenithWakfuService
+            .GetBuilds(
+                ++currentFetchedPage,
+                {
+                    LevelFilter: {Min: currentLevelFilter.min, Max: currentLevelFilter.max},
+                    ClassFilter: currentClassFilter
+                });
 
-    const buildsEnhanced = buildList.builds.map(x => {
+        buildsFetched.push(...buildList.builds)
+    }
+
+    currentBuilds.push(...buildsFetched);
+
+    const buildsEnhanced = buildsFetched.map(x => {
         return new BuildEnhanced(
             x,
             (buildsDiv) => {
-                console.log("trigger")
-                buildsDiv.RefreshDisplay()
+                if (isInFilterState) {
+                    buildsFilteredDiv.UpdateFetching();
+                }
+                else {
+                    buildsDiv.RefreshDisplay()
+                }
+
             },
             buildsDiv,
             zenithWakfuService.GetEnchants(x.id_build),
@@ -69,18 +84,26 @@ async function HandleBuilds(): Promise<void> {
     });
 
     getBuildsCallEventService.DispatchGetBuildsCallEndedEvent();
-
-    buildsDiv.PushNewBuilds(buildsEnhanced);
+    if (isInFilterState) {
+        buildsFilteredDiv.GatherBuildsAndUpdateFetchingView(buildsEnhanced);
+    }
+    else {
+        buildsDiv.PushNewBuilds(buildsEnhanced);
+    }
 }
 
 function HandleBuildFetchingStarted(_evt: Event) {
+    if (isInFilterState) {
+        buildsFilteredDiv.DisplayIsFetching(pageToRetrieveInFilterMode * 10);
+    }
     getPageButton.SetFetchingDataState();
-    restartFetch.SetFetchingDataState();
 }
 
 function HandleBuildFetchingEnded(_evt: Event) {
+    if (isInFilterState) {
+        buildsFilteredDiv.DisplayEndFetching(pageToRetrieveInFilterMode * 10);
+    }
     getPageButton.SetFetchingEndedState();
-    restartFetch.SetFetchingEndedState();
 }
 
 function HandleFilterClassToggled(classId: number) {
@@ -97,5 +120,10 @@ function HandleFilterLevelUpdated(levelType: 'min' | 'max', value: number) {
     else {
         currentLevelFilter = {min: currentLevelFilter.min, max: Number(value)};
     }
+}
+
+function HandleFilterResultUpdated(hasEnchant: boolean, hasEquipment: boolean, hasActiveSpell: boolean, hasPassiveSpell: boolean) {
+    const filter = new BuildFilters(hasEnchant, hasEquipment, hasActiveSpell, hasPassiveSpell);
+    buildsFilteredDiv.UpdateFilters(filter);
 }
 

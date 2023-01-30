@@ -15,7 +15,7 @@ export class FiltersDiv {
     }
 
     public DisplayFilters() {
-        const filterList = [...this.GetClassFilterList(), ...this.GetLevelFilterList()];
+        const filterList = [...this.GetClassFilterList(), ...this.GetLevelFilterList(), ...this.GetFilterResultList()];
         filterList.forEach(x => this.Div.appendChild(x));
     }
 
@@ -36,6 +36,42 @@ export class FiltersDiv {
 
         divList.push(div);
         return divList;
+    }
+
+    private GetFilterResultList(): HTMLDivElement[] {
+        let divList: HTMLDivElement[] = [];
+
+        const div = document.createElement('div');
+
+        const [enchantName, enchantInput] = this.getInputFilterResult('Enchant')
+        const [EquipmentName, EquipmentInput] = this.getInputFilterResult('Equipment')
+        const [PassiveName, PassiveInput] = this.getInputFilterResult('Passive')
+        const [ActiveName, ActiveInput] = this.getInputFilterResult('Active')
+
+        // @ts-ignore
+        enchantInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked))
+
+        div.appendChild(enchantName);
+        div.appendChild(enchantInput);
+        div.appendChild(EquipmentName);
+        div.appendChild(EquipmentInput);
+        div.appendChild(PassiveName);
+        div.appendChild(PassiveInput);
+        div.appendChild(ActiveName);
+        div.appendChild(ActiveInput);
+
+        divList.push(div);
+        return divList;
+    }
+
+    private getInputFilterResult(name: string) {
+        const filterName = document.createElement('span');
+        filterName.innerText = name;
+
+        const filterInput = document.createElement('input');
+        filterInput.type = 'checkbox';
+
+        return [filterName, filterInput];
     }
 
     private getInputLevelDiv(type: 'min' | 'max'): [HTMLSpanElement, HTMLInputElement] {

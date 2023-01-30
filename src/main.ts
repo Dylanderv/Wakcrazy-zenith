@@ -8,7 +8,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
             <div>
                  <div id="filters"></div>
                  <button id="fetchNextPageButton" type="button"></button>
-                 <button id="restartFetch" type="button"></button>
             </div>
         </div>
       <div id="builds"></div>
@@ -18,6 +17,5 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
 setupTestCallButton(
     document.querySelector<HTMLButtonElement>('#fetchNextPageButton')!,
-    document.querySelector<HTMLButtonElement>('#restartFetch')!,
     document.querySelector<HTMLDivElement>('#builds')!,
     document.querySelector<HTMLDivElement>('#filters')!)

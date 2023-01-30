@@ -3,6 +3,7 @@ import {eventService} from "./Event.service";
 class FilterEventService {
     private readonly ToggleClassFilterEvent: string = "ClassFilter_Toggled"
     private readonly ToggleLevelFilterEvent: string = "LevelFilterUpdated"
+    private readonly FilterResultEvent: string = "FilterResultEvent"
 
     DispatchToggleClassFilter(classId: number) {
         const event = new CustomEvent(this.ToggleClassFilterEvent, {detail: classId});
@@ -11,6 +12,11 @@ class FilterEventService {
 
     DispatchLevelFilterUpdated(levelType: 'min' | 'max', value: number) {
         const event = new CustomEvent(this.ToggleLevelFilterEvent, {detail: {type: levelType, value}});
+        eventService.DispatchEvent(event);
+    }
+
+    DispatchFilterResultEvent(hasEnchant: boolean, hasEquipment: boolean, hasActiveSpell: boolean, hasPassiveSpell: boolean) {
+        const event = new CustomEvent(this.FilterResultEvent, {detail: {hasEnchant, hasEquipment, hasActiveSpell, hasPassiveSpell}});
         eventService.DispatchEvent(event);
     }
 
@@ -26,6 +32,14 @@ class FilterEventService {
         eventService.AddEventListener(this.ToggleLevelFilterEvent, (event: CustomEvent) => {
             // @ts-ignore
             listener(event.detail.type, event.detail.value);
+        })
+    }
+
+    SetFilterResultEventListener(listener: (hasEnchant: boolean, hasEquipment: boolean, hasActiveSpell: boolean, hasPassiveSpell: boolean) => void) {
+        // @ts-ignore
+        eventService.AddEventListener(this.FilterResultEvent, (event: CustomEvent) => {
+            // @ts-FilterResultEvent
+            listener(event.detail.hasEnchant, event.detail.hasEquipment, event.detail.hasActiveSpell, event.detail.hasPassiveSpell);
         })
     }
 }
