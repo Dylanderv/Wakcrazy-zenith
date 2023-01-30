@@ -50,6 +50,12 @@ export class FiltersDiv {
 
         // @ts-ignore
         enchantInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked))
+// @ts-ignore
+        EquipmentInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked))
+        // @ts-ignore
+        PassiveInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked))
+        // @ts-ignore
+        ActiveInput.addEventListener('input', (e) => filterEventService.DispatchFilterResultEvent(enchantInput.checked, EquipmentInput.checked, ActiveInput.checked, PassiveInput.checked))
 
         div.appendChild(enchantName);
         div.appendChild(enchantInput);
